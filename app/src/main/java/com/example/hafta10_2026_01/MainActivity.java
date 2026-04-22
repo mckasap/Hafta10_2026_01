@@ -88,12 +88,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                     rd.close();
                     JSONObject obj = new JSONObject(sb.toString());
+
+                    if (obj.getString("type").equals("story") && obj.has("url"))  {
                     HackerNewsItem hn = new HackerNewsItem(
                             obj.getString("title"),
                             obj.getString("url"),
                             obj.getInt("id"),
                             obj.getString("type"));
-                    if (hn.getType()=="story" ) {
                         return hn;
                     }else
                             return null;
@@ -133,15 +134,14 @@ public class MainActivity extends AppCompatActivity {
             String result =   mt.execute().get();
             JSONArray ja = new JSONArray(result);
             for (int i = 0; i < ja.length(); i++) {
-                Log.d("RESULT",ja.getString(i));
+                Log.d("RESULT", ja.getString(i));
                 mySecondTask mt2 = new mySecondTask();
                 HackerNewsItem hn = mt2.execute(ja.getString(i)).get();
-                if (hn!=null) {
+                if (hn != null) {
                     liste.add(hn);
                 }
 
             }
-
             Log.d("RESULT",result);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
